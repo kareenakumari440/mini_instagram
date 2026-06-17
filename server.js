@@ -2,12 +2,14 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { MongoClient, ObjectId } = require("mongodb");
+const path = require("path");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
 app.use(express.static("images"));
+app.use(express.static(__dirname));
 
 const client = new MongoClient(process.env.atlas_URL);
 
@@ -24,7 +26,7 @@ client.connect()
   });
 
 app.get("/", (req, res) => {
-  res.send("API is running");
+  res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.get("/requests", async (req,res)=>{
