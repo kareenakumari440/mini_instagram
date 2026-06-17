@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { MongoClient, ObjectId } = require("mongodb");
@@ -8,12 +9,22 @@ app.use(express.json());
 
 app.use(express.static("images"));
 
-const client = new MongoClient("mongodb://localhost:27017");
+const client = new MongoClient(process.env.atlas_URL);
+
+
 let db;
 
-client.connect().then(()=>{
- db = client.db("socialApp");
- console.log("MongoDB connected");
+client.connect()
+  .then(() => {
+    db = client.db("socialApp");
+    console.log("MongoDB connected");
+  })
+  .catch(err => {
+    console.error("MongoDB connection error:", err);
+  });
+
+app.get("/", (req, res) => {
+  res.send("API is running");
 });
 
 app.get("/requests", async (req,res)=>{
