@@ -29,6 +29,12 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
+
+app.get("/login.html", (req, res) => {
+  res.sendFile(path.join(__dirname, "login.html"));
+});
+
+
 app.get("/requests", async (req,res)=>{
  const data = await db.collection("friendRequests").find().toArray();
  res.json(data);
