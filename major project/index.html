@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Social Media App – Pro UI</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;font-family:Poppins;}
+body{
+    background:linear-gradient(135deg,#ff758c,#ff7eb3);
+    transition:0.5s;
+    color:#333;
+}
+.dark{
+    background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+    color:white;
+}
+header{
+    padding:16px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:24px;
+    color:white;
+    background:rgba(0,0,0,0.25);
+    backdrop-filter:blur(10px);
+    position:sticky;
+    top:0;
+    box-shadow:0 8px 20px rgba(0,0,0,0.3);
+    z-index:1000;
+}
+header button{
+    background:linear-gradient(135deg,#ff758c,#ff7eb3);
+    border:none;
+    padding:8px 16px;
+    border-radius:25px;
+    font-size:18px;
+    font-weight:600;
+    color:#fff;
+    cursor:pointer;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+    transition:0.3s;
+}
+header button:hover{
+    transform:scale(1.1);
+    box-shadow:0 8px 25px rgba(0,0,0,0.3);
+}
+.container{max-width:700px;margin:auto;padding:20px;}
+.card{
+    background:rgba(255,255,255,0.25);
+    backdrop-filter:blur(15px);
+    border-radius:20px;
+    padding:20px;
+    margin:20px 0;
+    box-shadow:0 20px 40px rgba(0,0,0,0.2);
+    transition:0.3s;
+}
+.card:hover{transform:translateY(-5px);}
+.dark .card{background:rgba(0,0,0,0.45);}
+.profile{text-align:center;}
+.profile img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    border:5px solid;
+    border-image:linear-gradient(45deg,#ff758c,#ff7eb3) 1;
+    object-fit:cover;
+    transition:0.3s;
+}
+.profile img:hover{transform:scale(1.05);}
+.profile h3{
+    margin:12px 0 5px;
+    font-size:22px;
+    text-shadow:1px 1px 5px rgba(0,0,0,0.3);
+}
+.stats{
+    display:flex;
+    justify-content:space-around;
+    margin-top:12px;
+    font-weight:600;
+    color:#fff;
+}
+.flex{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+}
+.flex button{
+    background:linear-gradient(135deg,#ff758c,#ff7eb3);
+    color:#fff;
+    font-weight:600;
+    border-radius:25px;
+    padding:10px 18px;
+    cursor:pointer;
+    transition:0.3s;
+}
+.flex button:hover{
+    transform:scale(1.05);
+    box-shadow:0 5px 20px rgba(0,0,0,0.25);
+}
+.search{
+    flex:1;
+    padding:10px 15px;
+    border-radius:25px;
+    border:none;
+    outline:none;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
+.search:focus{
+    box-shadow:0 5px 20px rgba(0,0,0,0.3);
+}
+.post{position:relative;overflow:hidden;}
+.post img{
+    width:100%;
+    border-radius:15px;
+    transition:0.3s;
+}
+.post img:hover{transform:scale(1.03);}
+.heart{
+    position:absolute;
+    top:50%;
+    left:50%;
+    font-size:80px;
+    transform:translate(-50%,-50%) scale(0);
+    opacity:0;
+    pointer-events:none;
+}
+.show-heart{
+    animation:heartPop 0.7s ease forwards;
+}
+@keyframes heartPop{
+    0%{transform:translate(-50%,-50%) scale(0);opacity:0;}
+    30%{transform:translate(-50%,-50%) scale(1.4);opacity:1;}
+    60%{transform:translate(-50%,-50%) scale(1);opacity:1;}
+    100%{transform:translate(-50%,-50%) scale(0);opacity:0;}
+}
+.requests{display:none;}
+.request{
+    background:rgba(255,255,255,0.3);
+    backdrop-filter:blur(10px);
+    padding:12px;
+    border-radius:15px;
+    margin-bottom:12px;
+    display:flex;
+    gap:12px;
+    align-items:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+    transition:0.3s;
+}
+.request img{width:60px;height:60px;border-radius:50%;object-fit:cover;}
+.info{flex:1;font-size:14px;}
+.warning{color:#ff4d6d;font-weight:600;}
+.safe{color:#28a745;font-weight:600;}
+#cameraOverlay{
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:rgba(0,0,0,0.85);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:999;
+    transition:0.3s;
+}
+#cameraOverlay video{
+    width:90%;
+    max-width:450px;
+    border-radius:15px;
+    box-shadow:0 0 30px rgba(255,255,255,0.3);
+}
+#cameraOverlay button{
+    margin-top:15px;
+    padding:10px 20px;
+    font-weight:600;
+    border-radius:25px;
+    border:none;
+    cursor:pointer;
+    background:linear-gradient(135deg,#ff758c,#ff7eb3);
+    color:#fff;
+    transition:0.3s;
+}
+#cameraOverlay button:hover{
+    transform:scale(1.05);
+    box-shadow:0 5px 20px rgba(0,0,0,0.3);
+}
+.floating-emoji{
+position:fixed;
+font-size:30px;
+bottom:80px;
+left:50%;
+transform:translateX(-50%);
+animation:floatUp 1.5s ease-out forwards;
+pointer-events:none;
+}
+
+@keyframes floatUp{
+
+0%{
+opacity:1;
+transform:translate(-50%,0) scale(1);
+}
+
+50%{
+opacity:1;
+transform:translate(-50%,-120px) scale(1.3);
+}
+
+100%{
+opacity:0;
+transform:translate(-50%,-220px) scale(0.8);
+}
+
+}
+</style>
+</head>
+<body>
+
+<header>
+📸 Dynamic photo interaction network app
+<button onclick="toggleTheme()">🌙</button>
+</header>
+
+<div class="container">
+
+<!-- PROFILE -->
+<div class="card profile">
+<img src="IMG_20240109_161908.jpg">
+<h3>Kareena2834</h3>
+
+<div class="stats">
+<div>Posts<br><span id="postCount">0</span></div>
+<div>👥Followers<br><span id="followersCount">120</span></div>
+<div>👥Following<br>180</div>
+</div>
+</div>
+
+<!-- ACTION BAR -->
+<div class="card flex">
+<button onclick="openPicker()">📷 One Shot</button>
+<button onclick="openCamera()">📷 Live Capture</button>
+<input class="search" placeholder="Search users...">
+<button onclick="toggleRequests()">👥 Requests</button>
+</div>
+
+<!-- FRIEND REQUESTS -->
+<div class="card requests" id="requests"></div>
+
+<!-- POSTS -->
+<div id="feed"></div>
+
+<input type="file" id="imageInput" accept="image/*" capture="environment" hidden>
+
+<!-- CAMERA OVERLAY -->
+<div id="cameraOverlay">
+<video id="liveVideo" autoplay></video>
+<button onclick="captureLive()">Click & Post</button>
+<button onclick="closeCamera()">Cancel</button>
+</div>
+
+<script>
+let postCounter = 0;
+function toggleTheme(){ document.body.classList.toggle("dark"); }
+function toggleRequests(){
+    const r = document.getElementById("requests");
+    r.style.display = r.style.display==="block"?"none":"block";
+}
+function openPicker(){ imageInput.click(); }
+
+const imageInput=document.getElementById("imageInput");
+imageInput.addEventListener("change", e=>{
+    const file=e.target.files[0];
+    if(!file) return;
+    const reader=new FileReader();
+    reader.onload=()=> createPost(reader.result);
+    reader.readAsDataURL(file);
+});
+
+function createPost(img){
+    postCounter++;
+    document.getElementById("postCount").innerText=postCounter;
+    const post=document.createElement("div");
+    post.className="card post";
+    post.innerHTML=`
+        <div class="heart">❤️</div>
+        <img src="${img}" class="post-img">
+        <div>
+            <div class="reactions">
+<button onclick="react(this,'like')">👍</button>
+<button onclick="react(this,'love')">❤️</button>
+<button onclick="react(this,'funny')">😂</button>
+<button onclick="react(this,'wow')">😮</button>
+
+<p>
+👍 <span class="like">0</span>
+❤️ <span class="love">0</span>
+😂 <span class="funny">0</span>
+😮 <span class="wow">0</span>
+</p>
+</div>
+        </div>`;
+    document.getElementById("feed").prepend(post);
+
+    const image = post.querySelector(".post-img");
+    image.addEventListener("dblclick", ()=>love(post));
+    let lastTap = 0;
+    image.addEventListener("touchend", ()=>{
+        const currentTime=new Date().getTime();
+        const tapLength=currentTime-lastTap;
+        if(tapLength<300 && tapLength>0) love(post);
+        lastTap=currentTime;
+    });
+}
+
+function react(btn,type){
+
+const post = btn.closest(".post");
+
+const span = post.querySelector("." + type);
+
+span.innerText = parseInt(span.innerText) + 1;
+
+floatingEmoji(btn.innerText);
+
+checkTrending(post);
+
+}
+function isSuspicious(p){
+    let s = 0;
+    if(!p.photo) s++;
+    if(p.posts===0) s++;
+    if(p.joined<3) s++;
+    return s>=2;
+}
+
+const reqBox = document.getElementById("requests");
+
+// Fetch friend requests from backend
+fetch("http://localhost:3000/requests")
+.then(res => res.json())
+.then(friendRequests => {
+    friendRequests.forEach(p => {
+        const sus = isSuspicious(p);
+        const div = document.createElement("div");
+        div.className = "request";
+        div.id = "req" + p._id;
+        div.innerHTML = `
+            <img src="${p.photo || 'https://via.placeholder.com/60'}">
+            <div class="info">
+                <b>${p.name}</b><br>
+                Posts: ${p.posts} | Joined: ${p.joined} days<br>
+                <span class="${sus?'warning':'safe'}">
+                    ${sus?'🚨 Suspicious Profile':'✅ Genuine Profile'}
+                </span><br><br>
+                <button class="accept-btn" data-id="${p._id}" ${sus?'disabled':''}>Accept</button>
+                <button class="reject-btn" data-id="${p._id}">Reject</button>
+            </div>`;
+        reqBox.appendChild(div);
+    });
+});
+
+// Event delegation for accept/reject buttons
+reqBox.addEventListener("click", e => {
+    const id = e.target.dataset.id;
+    if(!id) return;
+
+    if(e.target.classList.contains("accept-btn")){
+        fetch(`http://localhost:3000/requests/accept/${id}`, { method: "POST" })
+        .then(res => res.json())
+        .then(data => {
+          if(data.success){
+    document.getElementById("req"+id).innerHTML = "<b style='color:green'>✔ Accepted</b>";
+
+    // follower increment
+    const followers = document.getElementById("followersCount");
+    followers.innerText = parseInt(followers.innerText) + 1;
+}
+        }).catch(err => console.error(err));
+    }
+
+    if(e.target.classList.contains("reject-btn")){
+        fetch(`http://localhost:3000/requests/reject/${id}`, { method: "POST" })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success){
+                document.getElementById("req"+id).innerHTML = "<b style='color:red'>✖ Rejected</b>";
+            }
+        }).catch(err => console.error(err));
+    }
+});
+
+// CAMERA SYSTEM
+let liveStream=null;
+const overlay=document.getElementById("cameraOverlay");
+const liveVideo=document.getElementById("liveVideo");
+
+function openCamera(){
+    navigator.mediaDevices.getUserMedia({video:true})
+    .then(stream=>{
+        liveStream=stream;
+        liveVideo.srcObject=stream;
+        overlay.style.display="flex";
+    }).catch(()=>alert("Camera permission denied"));
+}
+
+function captureLive(){
+    const canvas=document.createElement("canvas");
+    canvas.width=400; canvas.height=300;
+    const ctx=canvas.getContext("2d");
+    ctx.drawImage(liveVideo,0,0,canvas.width,canvas.height);
+    createPost(canvas.toDataURL("image/png"));
+    closeCamera();
+}
+
+function closeCamera(){
+    if(liveStream){ liveStream.getTracks().forEach(t=>t.stop()); liveStream=null; }
+    overlay.style.display="none";
+}
+
+// SEARCH SYSTEM
+const searchUsers=[
+    {id:"kareena2834",photo:"IMG_20250131_192400_648.webp"},
+    {id:"aman_01",photo:"IMG_20230611_132728.jpg"},
+    {id:"riya_sharma",photo:"IMG_20230710_153610.jpg"},
+    {id:"karan_verma",photo:"download (3).jpeg"},
+    {id:"neha_90",photo:"IMG_20240128_105235.jpg"},
+    {id:"rahul_x",photo:"download (1).jpeg"},
+    {id:"simran_kaur",photo:"download (7).jpeg"},
+    {id:"rohit_777",photo:"download (2).jpeg"},
+    {id:"unknown_99",photo:"https://via.placeholder.com/80"},
+    {id:"fake_007",photo:"https://via.placeholder.com/80"}
+];
+
+const searchInput=document.querySelector(".search");
+const resultBox=document.createElement("div");
+resultBox.className="card";
+resultBox.style.display="none";
+searchInput.parentElement.after(resultBox);
+
+searchInput.addEventListener("input", e=>{
+    const q=e.target.value.toLowerCase();
+    resultBox.innerHTML="";
+    if(q===""){ resultBox.style.display="none"; return; }
+    const filtered=searchUsers.filter(u=>u.id.includes(q));
+    if(filtered.length===0){
+        resultBox.innerHTML="<p>No user found</p>";
+    }else{
+        filtered.forEach(u=>{
+            resultBox.innerHTML+=`
+            <div class="request">
+            <img src="${u.photo}">
+            <div class="info">
+            <b>${u.id}</b><br>
+            <button onclick="alert('Opening profile: ${u.id}')">
+            View Profile</button>
+            </div></div>`;
+        });
+    }
+    resultBox.style.display="block";
+});
+function floatingEmoji(emoji){
+
+const e = document.createElement("div");
+
+e.className = "floating-emoji";
+
+e.innerText = emoji;
+
+document.body.appendChild(e);
+
+setTimeout(()=>{
+
+e.remove();
+
+},1500);
+
+}
+</script>
+</body>
+</html>

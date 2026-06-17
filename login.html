@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+<style>
+body{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    background:linear-gradient(135deg,#ff758c,#ff7eb3);
+    font-family:Poppins;
+}
+.box{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    text-align:center;
+    box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+input{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid #ccc;
+}
+button{
+    padding:10px 20px;
+    border:none;
+    border-radius:20px;
+    background:#ff758c;
+    color:white;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>Login</h2>
+
+<input type="text" id="user" placeholder="Username">
+<input type="password" id="pass" placeholder="Password">
+
+<button onclick="login()">Login</button>
+
+<p id="error" style="color:red;"></p>
+</div>
+
+<script>
+function login(){
+
+    const username = document.getElementById("user").value;
+    const password = document.getElementById("pass").value;
+
+    // simple demo login (you can change)
+    if(username === "admin" && password === "1234"){
+        
+        localStorage.setItem("loggedIn", "true");
+
+        window.location.href = "index.html";
+    }else{
+        document.getElementById("error").innerText = "Invalid login ❌";
+    }
+}
+</script>
+
+</body>
+</html>
